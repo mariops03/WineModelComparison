@@ -1,82 +1,76 @@
-# WineModelComparison
+# Wine Model Comparison
 
-This repository presents an analysis and comparison of various classification techniques applied to the well-known Wine Dataset. The aim is to predict wine categories based on chemical characteristics, utilizing multiple machine learning models and evaluating their performance.
+Comparison of 5 classification techniques for predicting wine types using the [Wine Dataset](https://archive.ics.uci.edu/dataset/109/wine) from the UCI Machine Learning Repository. Built as a project for an **Artificial Intelligence** course, the analysis covers the full ML pipeline: data scaling, model training with grid search, cross-validation, and evaluation through accuracy, classification reports, confusion matrices, and ROC AUC curves.
 
-## Table of Contents
-- [Overview](#overview)
-- [Dataset](#dataset)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Models Evaluated](#models-evaluated)
-- [Results and Evaluation](#results-and-evaluation)
-- [Visualization](#visualization)
-- [Conclusion](#conclusion)
-- [References](#references)
+The dataset contains 178 wine samples from three Italian cultivars, each described by 13 chemical properties (alcohol, malic acid, flavonoids, color intensity, proline, etc.). The goal is to classify each sample into one of the three cultivar classes.
 
-## Overview
-The analysis explores how different machine learning algorithms can effectively classify wines into three categories based on 13 chemical properties. This classification problem provides insights into model performance in a multi-class setting with a small dataset. The analysis and experiments were conducted using Python's `scikit-learn` library.
+<div align="center">
+  <img src="assets/pca.png" alt="PCA of Wine Dataset" width="550" />
+  <br>
+  <em>PCA projection showing clear cluster separation across the three wine classes</em>
+</div>
+
+## Results
+
+| Model | Accuracy | AUC ROC | Precision | Recall | F1-Score |
+|-------|----------|---------|-----------|--------|----------|
+| **SVM** | **100%** | **1.0000** | 1.00 | 1.00 | 1.00 |
+| **Random Forest** | **100%** | **1.0000** | 1.00 | 1.00 | 1.00 |
+| **Neural Network** | **100%** | **1.0000** | 1.00 | 1.00 | 1.00 |
+| KNN | 94.44% | 0.9995 | 0.95 | 0.94 | 0.94 |
+| Decision Tree | 94.44% | 0.9521 | 0.94 | 0.95 | 0.94 |
+
+SVM, Random Forest, and Neural Network achieved perfect classification. KNN and Decision Tree reached 94.44% accuracy, with minor misclassifications concentrated in class 1. A paired t-test between KNN and SVM showed no statistically significant difference (p > 0.05).
+
+## Models
+
+- **K-Nearest Neighbors (KNN)** — Non-parametric classifier based on proximity to the k closest neighbors. Sensitive to the choice of k and feature scaling, but effective for small datasets with non-linear boundaries.
+
+- **Support Vector Machine (SVM)** — Finds the optimal hyperplane maximizing margin between classes. Kernel functions handle non-linear separability. Robust against overfitting with limited samples.
+
+- **Decision Tree** — Hierarchical splits based on feature thresholds. Highly interpretable but prone to overfitting without pruning. No normalization required.
+
+- **Random Forest** — Ensemble of decision trees trained on random feature/data subsets. Reduces variance and overfitting compared to a single tree while maintaining interpretability.
+
+- **Neural Network (MLP)** — Multi-layer perceptron with backpropagation. Flexible enough to model complex non-linear relationships. Uses SoftMax activation for multi-class output.
 
 ## Dataset
-The dataset used is the Wine Dataset from the UCI Machine Learning Repository, available within `scikit-learn`. It consists of 178 samples divided into three classes, each representing a distinct cultivar. The 13 features include attributes such as alcohol content, magnesium levels, color intensity, and others, which are useful for wine classification tasks.
 
-## Installation
-To run this project, ensure you have Python installed. Install the required packages with:
+| Property | Value |
+|----------|-------|
+| Source | [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/109/wine) |
+| Samples | 178 |
+| Features | 13 (alcohol, malic acid, ash, alkalinity, magnesium, phenols, flavonoids, nonflavanoid phenols, proanthocyanins, color intensity, hue, OD280/OD315, proline) |
+| Classes | 3 cultivars (59 / 71 / 48 samples) |
+| Missing values | None |
+
+## How it works
+
+1. Load the Wine Dataset from scikit-learn
+2. Scale features with `StandardScaler` for consistent ranges
+3. Split into train/test sets (80/20)
+4. Train each model with hyperparameter tuning via **grid search + cross-validation**
+5. Evaluate: accuracy, classification report, confusion matrix, ROC AUC
+6. Compare models with a paired t-test and PCA visualization
+
+## Running it
 
 ```bash
 pip install -r requirements.txt
-```
-
-**Dependencies**:
-- scikit-learn
-- matplotlib
-- seaborn
-- scipy
-
-## Usage
-To execute the analysis, run `analisis.py`. This script loads the data, scales it, applies multiple classification algorithms, and outputs comparative results, including accuracy, confusion matrices, and AUC ROC scores.
-
-```bash
 python analisis.py
 ```
 
-## Models Evaluated
-The following classification models were implemented and compared:
-1. **K-Nearest Neighbors (KNN)** - A non-parametric model that classifies based on proximity to the closest neighbors.
-2. **Support Vector Machine (SVM)** - Finds an optimal separating hyperplane, with kernel functions to handle non-linear boundaries.
-3. **Decision Tree** - Builds a decision tree based on feature splits, easy to interpret but prone to overfitting.
-4. **Random Forest** - An ensemble of decision trees providing robust performance and reduced variance.
-5. **Neural Network (MLP)** - A multi-layer perceptron, effective for complex patterns in small datasets.
+**Dependencies:** scikit-learn, matplotlib, seaborn, scipy
 
-## Results and Evaluation
-Each model was evaluated based on:
-- **Accuracy Score**: Overall classification accuracy.
-- **Classification Report**: Precision, recall, and F1-score per class.
-- **Confusion Matrix**: Visual representation of true vs. predicted classifications.
-- **AUC ROC Score**: For multi-class classification performance.
-  
-**Summary of Results**:
-- **SVM, Random Forest, and Neural Network** achieved perfect classification accuracy (100%).
-- **KNN and Decision Tree** reached an accuracy of 94.44%.
-- A paired t-test between KNN and SVM showed no statistically significant difference, suggesting comparable performance.
+## Tech stack
 
-## Visualization
-The following visualizations are included:
-1. **Confusion Matrices** - Visualized for each model to display classification performance.
-2. **Model Comparison** - A bar plot comparing accuracy scores across all models.
-3. **PCA Scatter Plot** - Two principal components visualize the wine classes and highlight the separability of data points.
+| | |
+|---|---|
+| **Language** | Python |
+| **ML library** | scikit-learn |
+| **Visualization** | matplotlib, seaborn |
+| **Statistics** | scipy (paired t-test) |
 
-## Conclusion
-The analysis demonstrates that SVM, Random Forest, and Neural Network are highly effective for wine classification, achieving the highest performance. While KNN and Decision Tree also performed well, their accuracy was slightly lower and showed susceptibility to noise and parameter sensitivity.
+## Context
 
-## References
-This project was inspired by the following sources:
-
-- Scikit-Learn Documentation - [Pedregosa et al., 2011](https://www.jmlr.org/papers/volume12/pedregosa11a/pedregosa11a.pdf)
-- UCI Machine Learning Repository - Wine Dataset
-- Academic resources on machine learning techniques for classification:
-  - [https://doi.org/10.24432/C5PC7J](https://doi.org/10.24432/C5PC7J)
-  - [IEEE on Random Forests](https://ieeexplore.ieee.org/document/4160265)
-  - [Research on Neural Networks in Classification](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4916348/)
-- Additional tutorials and examples:
-  - PCA in 3D - [Scikit-Learn PCA Visualization](https://scikit-learn.org/0.22/auto_examples/decomposition/plot_pca_3d.html)
-  - [StandardScaler Usage Guide](https://interactivechaos.com/es/manual/tutorial-de-machine-learning/standardscaler)
+Built for an **Artificial Intelligence** course at Universidad de Salamanca, 2024. The project explores classification fundamentals: algorithm selection, hyperparameter optimization, model evaluation metrics, and statistical comparison of results.
